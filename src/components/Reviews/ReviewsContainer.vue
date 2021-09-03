@@ -11,6 +11,7 @@
 <script>
 import ReviewCard from "./ReviewCard.vue";
 import { mapGetters } from "vuex";
+import ProductService from '../../services/product.service'
 
 export default {
   name: "ReviewsContainer",
@@ -20,17 +21,7 @@ export default {
   computed: {
     ...mapGetters(["sortByVote", "sortByCategory", "reviews"]),
     filteredReviews() {
-      let votesFilter = this.reviews.slice(0).sort((a, b) => {
-        return this.sortByVote === "Most Upvotes"
-          ? b.votes - a.votes
-          : a.votes - b.votes;
-      });
-
-      let categoryFilter = votesFilter.filter(
-        (review) => review.category === this.sortByCategory
-      );
-
-      return categoryFilter;
+      return ProductService.filterReviews(this.reviews, this.sortByVote, this.sortByCategory)
     },
   },
 };
